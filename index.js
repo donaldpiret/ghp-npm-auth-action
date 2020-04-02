@@ -57,6 +57,7 @@ async function run() {
         registryUrl.replace(/(^\w+:|^)/, '') + `:_authToken=${installationAccessToken}`
     const registryString = scope ? `${scope}:registry=${registryUrl}` : `registry=${registryUrl}`
     newContents += `${authString}${os.EOL}${registryString}`
+    core.info(`Debug: ${newContents}`)
     fs.writeFileSync(npmrc, newContents)
     core.exportVariable('NPM_CONFIG_USERCONFIG', npmrc)
     // Export empty node_auth_token so npm doesn't complain about not being able to find it
