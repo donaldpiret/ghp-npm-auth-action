@@ -2224,7 +2224,7 @@ async function run() {
     })
 
     const npmrc = path.resolve(process.env['RUNNER_TEMP'] || process.cwd(), '.npmrc')
-    const registryUrl = 'npm.pkg.github.com'
+    const registryUrl = 'https://npm.pkg.github.com'
     let scope = core.getInput('scope')
     if (!scope) {
         scope = github.context.repo.owner
@@ -2248,10 +2248,10 @@ async function run() {
             }
         })
     }
+    const registryString = scope ? `${scope}:registry=${registryUrl}` : `registry=${registryUrl}`
     // Remove http: or https: from front of registry.
     const authString =
         registryUrl.replace(/(^\w+:|^)/, '') + `:_authToken=${installationAccessToken}`
-    const registryString = scope ? `${scope}:registry=${registryUrl}` : `registry=${registryUrl}`
     newContents += `${authString}${os.EOL}${registryString}`
     core.info(`Debug: ${newContents}`)
     fs.writeFileSync(npmrc, newContents)
