@@ -12,10 +12,11 @@ async function run() {
     const appPrivateKey = core.getInput('pem-private-key').replace(/\\n/gm, '\n')
 
     const app = new App({ id: appId, privateKey: appPrivateKey })
+    const orgName = github.context.repo.owner
     const jwt = app.getSignedJsonWebToken()
 
     const { data } = await request("GET /orgs/:owner/installation", {
-        owner: github.context.repo.owner,
+        owner: orgName,
         headers: {
             authorization: `Bearer ${jwt}`,
             accept: "application/vnd.github.machine-man-preview+json",
@@ -52,7 +53,7 @@ async function run() {
             }
         })
     }
-    const registryString = scope ? `${scope}:registry=${registryUrl}` : `registry=${registryUrl}`
+    const registryString = scope ? `${scope}:registry=${registryUrl}/${orgName}` : `registry=${registryUrl}/${orgName}`
     // Remove http: or https: from front of registry.
     const authString =
         registryUrl.replace(/(^\w+:|^)/, '') + `:_authToken=${installationAccessToken}`
