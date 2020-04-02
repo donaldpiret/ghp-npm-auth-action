@@ -1,11 +1,12 @@
 {
   "name": "ghp-npm-auth-action",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "GitHub Action to use a GitHub Application and authenticate to NPM in order to access private NPM packages",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "eslint index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint index.js && jest",
+    "build": "ncc build index.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
     "NPM"
   ],
   "author": "Sephora Asia",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
@@ -31,6 +32,8 @@
     "semi": false
   },
   "devDependencies": {
+    "@zeit/ncc": "^0.22.0",
+    "eslint": "^6.8.0",
     "jest": "^25.2.4",
     "prettier": "2.0.2"
   }

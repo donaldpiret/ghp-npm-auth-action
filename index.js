@@ -9,14 +9,13 @@ const os = require('os')
 // most @actions toolkit packages have async methods
 async function run() {
     const appId = parseInt(core.getInput('app-id'))
-    const appPrivateKey = core.getInput('pem-private-key')
+    const appPrivateKey = core.getInput('pem-private-key').replace(/\\n/gm, '\n')
 
     const app = new App({ id: appId, privateKey: appPrivateKey })
     const jwt = app.getSignedJsonWebToken()
 
-    const { data } = await request("GET /repos/:owner/:repo/installation", {
+    const { data } = await request("GET /orgs/:owner/installation", {
         owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
         headers: {
             authorization: `Bearer ${jwt}`,
             accept: "application/vnd.github.machine-man-preview+json",
@@ -54,7 +53,8 @@ async function run() {
         })
     }
     // Remove http: or https: from front of registry.
-    const authString = registryUrl.replace(/(^\w+:|^)/, '') + ':_authToken=${NODE_AUTH_TOKEN}'
+    const authString =
+        registryUrl.replace(/(^\w+:|^)/, '') + `:_authToken=${installationAccessToken}`
     const registryString = scope ? `${scope}:registry=${registryUrl}` : `registry=${registryUrl}`
     newContents += `${authString}${os.EOL}${registryString}`
     fs.writeFileSync(npmrc, newContents)
