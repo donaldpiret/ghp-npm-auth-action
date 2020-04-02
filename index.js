@@ -28,7 +28,7 @@ async function run() {
     })
 
     const npmrc = path.resolve(process.env['RUNNER_TEMP'] || process.cwd(), '.npmrc')
-    const registryUrl = 'npm.pkg.github.com'
+    const registryUrl = 'https://npm.pkg.github.com'
     let scope = core.getInput('scope')
     if (!scope) {
         scope = github.context.repo.owner
