@@ -1,0 +1,15 @@
+name: 'Github Packages NPM Authentication'
+description: 'Authenticate to Github Packages NPM as a Github Application'
+inputs:
+  app-id:
+    description: 'Github App ID to use to authenticate'
+    required: true
+  pem-private-key:
+    description: 'Private key of the Github Application (should come from a secret)'
+    required: true
+  scope:
+    description: 'NPM scope to auth against. Leave blank to use the org name'
+    required: false
+runs:
+  using: 'node12'
+  main: 'index.js'
